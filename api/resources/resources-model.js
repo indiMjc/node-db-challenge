@@ -13,6 +13,8 @@ function addRes(resource) {
   return db('resources')
     .insert(resource)
     .then(id => {
-      return db('resources').where({ id: id[0] });
+      return db('resources')
+        .where({ id: id[0] })
+        .first();
     });
 }

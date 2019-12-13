@@ -15,4 +15,16 @@ router.get('/', (req, res) => {
     });
 });
 
+router.post('/', (req, res) => {
+  const projectData = req.body;
+  Projects.addProject(projectData)
+    .then(project => {
+      res.status(201).json(project);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'Failed to add new project.' });
+    });
+});
+
 module.exports = router;
