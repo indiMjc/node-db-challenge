@@ -34,12 +34,6 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.get('/testing/:id', (req, res) => {
-  Tasks.getTaskById(req.params.id).then(task => {
-    res.json(task);
-  });
-});
-
 router.post('/:id', (req, res) => {
   const newTask = req.body;
   const { id } = req.params;

@@ -28,7 +28,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.get('/:id/withtasks', (req, res) => {
-  Projects.findProjectTasks(req.params.id)
+  Projects.findProjectWithTasks(req.params.id)
     .then(project => {
       delete project.resource_id;
       project.completed = project.completed ? true : false;

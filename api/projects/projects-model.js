@@ -3,7 +3,7 @@ const db = require('../../data/dbConfig');
 module.exports = {
   findProjects,
   findProjectById,
-  findProjectTasks,
+  findProjectWithTasks,
   addProject
 };
 
@@ -13,11 +13,11 @@ function findProjects() {
 
 function findProjectById(id) {
   return db('projects')
-    .where('projects.id', id)
+    .where({ id })
     .first();
 }
 
-function findProjectTasks(id) {
+function findProjectWithTasks(id) {
   return findProjectById(id).then(project => {
     return db('tasks')
       .where({ project_id: id })
