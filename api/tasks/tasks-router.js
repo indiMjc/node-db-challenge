@@ -7,13 +7,8 @@ const router = express.Router();
 router.get('/', (req, res) => {
   Tasks.getTasks()
     .then(tasks => {
-      tasks.map(task => {
-        if (task.completed) {
-          task.completed = true;
-        } else {
-          task.completed = false;
-        }
-        return task;
+      tasks.forEach(task => {
+        task.completed = task.completed ? true : false;
       });
       res.status(201).json(tasks);
     })
@@ -27,6 +22,10 @@ router.get('/:id', (req, res) => {
   const { id } = req.params;
   Tasks.getTaskByProject(id)
     .then(tasks => {
+      tasks.forEach(task => {
+        !task.notes ? delete task.notes : null;
+        task.completed = task.completed ? true : false;
+      });
       res.status(201).json(tasks);
     })
     .catch(err => {
@@ -35,18 +34,23 @@ router.get('/:id', (req, res) => {
     });
 });
 
+router.get('/testing/:id', (req, res) => {
+  Tasks.getTaskById(req.params.id).then(task => {
+    res.json(task);
+  });
+});
+
 router.post('/:id', (req, res) => {
   const newTask = req.body;
   const { id } = req.params;
 
   Tasks.addTask(newTask, id)
-    .then(task => {
-      if (task.completed) {
-        task.completed = true;
-      } else {
-        task.completed = false;
-      }
-      res.status(201).json(task);
+    .then(ids => {
+      return Tasks.getTaskById(ids[0]).then(task => {
+        !task.notes ? delete task.notes : null;
+        task.completed = task.completed ? true : false;
+        res.status(201).json(task);
+      });
     })
     .catch(err => {
       console.log(err);
