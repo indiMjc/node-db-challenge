@@ -30,17 +30,17 @@ router.get('/:id', (req, res) => {
 router.get('/:id/withtasks', (req, res) => {
   Projects.findProjectWithTasks(req.params.id)
     .then(project => {
-      delete project.resource_id;
       project.completed = project.completed ? true : false;
       project.tasks.map(task => {
         delete task.project_id;
-        !task.notes ? delete task.notes : null;
+        !task.notes && delete task.notes;
         task.completed = task.completed ? true : false;
       });
       res.status(201).json(project);
     })
     .catch(err => {
       console.log(err);
+      res.status(500).json({ message: 'Failed to get project with tasks.' });
     });
 });
 

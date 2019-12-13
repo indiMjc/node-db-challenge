@@ -23,7 +23,7 @@ router.get('/:id', (req, res) => {
   Tasks.getTaskByProject(id)
     .then(tasks => {
       tasks.forEach(task => {
-        !task.notes ? delete task.notes : null;
+        !task.notes && delete task.notes;
         task.completed = task.completed ? true : false;
       });
       res.status(201).json(tasks);
@@ -41,7 +41,7 @@ router.post('/:id', (req, res) => {
   Tasks.addTask(newTask, id)
     .then(ids => {
       return Tasks.getTaskById(ids[0]).then(task => {
-        !task.notes ? delete task.notes : null;
+        !task.notes && delete task.notes;
         task.completed = task.completed ? true : false;
         res.status(201).json(task);
       });
