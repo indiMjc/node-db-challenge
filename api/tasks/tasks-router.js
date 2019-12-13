@@ -7,6 +7,14 @@ const router = express.Router();
 router.get('/', (req, res) => {
   Tasks.getTasks()
     .then(tasks => {
+      tasks.map(task => {
+        if (task.completed) {
+          task.completed = true;
+        } else {
+          task.completed = false;
+        }
+        return task;
+      });
       res.status(201).json(tasks);
     })
     .catch(err => {
@@ -21,6 +29,11 @@ router.post('/:id', (req, res) => {
 
   Tasks.addTask(newTask, id)
     .then(task => {
+      if (task.completed) {
+        task.completed = true;
+      } else {
+        task.completed = false;
+      }
       res.status(201).json(task);
     })
     .catch(err => {
