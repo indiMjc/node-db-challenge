@@ -56,4 +56,18 @@ router.post('/', (req, res) => {
     });
 });
 
+router.put('/:id', (req, res) => {
+  const { id } = req.params;
+  Projects.updateProject(id, req.body)
+    .then(() => {
+      return Projects.findProjectById(id).then(project => {
+        res.status(201).json(project);
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'Edit post failed.' });
+    });
+});
+
 module.exports = router;
